@@ -9,20 +9,24 @@
                           (interpose ", " (cons a more)))
                    "!")))
 
+; "(fn [x] (:eater x))" is the "dispatch-fn" by evaluating which will get the
+; "dispatch-val" of "defmethod", such as ":herbivore".
 (defmulti diet (fn [x] (:eater x)))
-(defmethod diet :herbivore [a] __)
-(defmethod diet :carnivore [a] __)
-(defmethod diet :default [a] __)
+; "a" is the passed argument, such as "{:species "deer" :name "Bambi" :age 1 :eater :herbivore}",
+; "(str (:name a) " eats veggies.")" is the implementation of the "defmethod".
+(defmethod diet :herbivore [a] (str (:name a) " eats veggies."))
+(defmethod diet :carnivore [a] (str (:name a) " eats animals."))
+(defmethod diet :default [a] (str "I don't know what " (:name a) " eats."))
 
 (meditations
   "Some functions can be used in different ways - with no arguments"
-  (= __ (hello))
+  (= "Hello World!" (hello))
 
   "With one argument"
-  (= __ (hello "world"))
+  (= "Hello, you silly world." (hello "world"))
 
   "Or with many arguments"
-  (= __
+  (= "Hello to this group: Peter, Paul, Mary!"
      (hello "Peter" "Paul" "Mary"))
 
   "Multimethods allow more complex dispatching"
